@@ -1,0 +1,47 @@
+/* Responsive adjustments for tablets and phones */
+
+@media (max-width: 720px) {
+  #game-wrapper {
+    margin: 0;
+    border-radius: 0;
+    width: 100vw;
+  }
+  .game-title { font-size: 20px; }
+  .hud-value { font-size: 10px; }
+  .hud-scores { gap: 10px; padding: 6px 10px; }
+  .btn-primary { min-width: 160px; font-size: 11px; padding: 12px 20px; }
+  .controls-hint { display: none; }
+}
+
+@media (max-width: 480px) {
+  .screen-inner { padding: 16px 10px; gap: 8px; }
+  .dino-emoji { font-size: 36px; }
+  .game-title { font-size: 16px; }
+  .game-tagline { font-size: 7px; }
+  .hud-label { font-size: 6px; }
+  .hud-value { font-size: 9px; }
+  .icon-btn { width: 32px; height: 32px; font-size: 13px; }
+  .achievements-list, .settings-list, .stats-list { max-width: 100%; }
+  .gameover-stats { gap: 12px; }
+}
+
+/* Show on-screen touch controls only for touch devices (JS toggles visibility,
+   this just ensures layout collapses nicely when shown) */
+@media (pointer: coarse) {
+  #mobile-controls {
+    bottom: env(safe-area-inset-bottom, 14px);
+    right: env(safe-area-inset-right, 14px);
+  }
+}
+
+/* Landscape phones: keep HUD compact */
+@media (max-height: 420px) and (orientation: landscape) {
+  #game-wrapper { margin: 0; }
+  .screen-inner { padding: 10px; gap: 6px; }
+  .dino-emoji { font-size: 28px; }
+  .controls-hint { margin-top: 8px; }
+}
+
+/* Orientation notice for very narrow portrait devices to encourage rotation
+   is intentionally omitted — the game remains fully playable in portrait
+   per the requirement that it stays usable in either orientation. */

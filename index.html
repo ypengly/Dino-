@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>Dino Run — Enhanced Endless Runner</title>
+<meta name="description" content="A polished Chrome Dino-style endless runner built with vanilla HTML5, CSS3 and JavaScript." />
+<meta name="theme-color" content="#141a30" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦖</text></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body>
+
+<div id="game-wrapper">
+
+  <canvas id="game-canvas" width="1000" height="340" aria-label="Dino Run game canvas"></canvas>
+
+  <!-- START SCREEN -->
+  <div id="start-screen" class="screen">
+    <div class="screen-inner">
+      <div class="dino-emoji">🦖</div>
+      <h1 class="game-title">DINO RUN</h1>
+      <p class="game-tagline">RUN • JUMP • SURVIVE</p>
+      <button id="play-btn" class="btn btn-primary">PLAY</button>
+      <div id="best-score-start" class="best-score-label">BEST: 000000</div>
+      <div class="menu-row">
+        <button id="stats-btn-start" class="btn btn-small">STATS</button>
+        <button id="achievements-btn-start" class="btn btn-small">AWARDS</button>
+        <button id="settings-btn-start" class="btn btn-small">SETTINGS</button>
+      </div>
+      <div class="controls-hint">
+        <span>SPACE / ↑ Jump</span><span>↓ Duck</span><span>P Pause</span><span>M Mute</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="hud-scores">
+        <div class="hud-block">
+          <span class="hud-label">SCORE</span>
+          <span id="hud-score" class="hud-value">0000000</span>
+        </div>
+        <div class="hud-block">
+          <span class="hud-label">BEST</span>
+          <span id="hud-best" class="hud-value">0000000</span>
+        </div>
+        <div class="hud-block">
+          <span class="hud-label">🪙</span>
+          <span id="hud-coins" class="hud-value">× 0</span>
+        </div>
+      </div>
+      <div class="hud-buttons">
+        <button id="pause-btn" class="icon-btn" aria-label="Pause">⏸</button>
+        <button id="mute-btn" class="icon-btn" aria-label="Mute">🔊</button>
+      </div>
+    </div>
+    <div id="combo-display" class="combo-display hidden">COMBO x0</div>
+    <div id="powerup-status" class="powerup-status"></div>
+  </div>
+
+  <!-- PAUSE SCREEN -->
+  <div id="pause-screen" class="screen hidden">
+    <div class="screen-inner">
+      <h2 class="screen-heading">PAUSED</h2>
+      <button id="resume-btn" class="btn btn-primary">RESUME</button>
+      <button id="restart-btn-pause" class="btn btn-small">RESTART</button>
+      <button id="quit-btn" class="btn btn-small">QUIT</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div id="gameover-screen" class="screen hidden">
+    <div class="screen-inner gameover-inner">
+      <div id="new-record-banner" class="new-record-banner hidden">🏆 NEW HIGH SCORE!</div>
+      <h2 class="screen-heading">GAME OVER</h2>
+      <div class="gameover-stats">
+        <div><span class="hud-label">SCORE</span><span id="final-score" class="hud-value">0</span></div>
+        <div><span class="hud-label">BEST</span><span id="final-best" class="hud-value">0</span></div>
+        <div><span class="hud-label">COINS</span><span id="final-coins" class="hud-value">0</span></div>
+      </div>
+      <button id="play-again-btn" class="btn btn-primary">PLAY AGAIN</button>
+      <button id="menu-btn-gameover" class="btn btn-small">MENU</button>
+      <p class="controls-hint-small">Press R to restart</p>
+    </div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+  <div id="settings-screen" class="screen hidden">
+    <div class="screen-inner">
+      <h2 class="screen-heading">SETTINGS</h2>
+      <div class="settings-list">
+        <label class="settings-row"><span>SOUND</span><input type="checkbox" id="setting-sound" /></label>
+        <label class="settings-row"><span>MUSIC</span><input type="checkbox" id="setting-music" /></label>
+        <label class="settings-row"><span>PARTICLES</span><input type="checkbox" id="setting-particles" /></label>
+        <label class="settings-row"><span>SHAKE</span><input type="checkbox" id="setting-shake" /></label>
+        <label class="settings-row">
+          <span>QUALITY</span>
+          <select id="setting-quality">
+            <option value="low">LOW</option>
+            <option value="medium">MEDIUM</option>
+            <option value="high">HIGH</option>
+          </select>
+        </label>
+      </div>
+      <button id="settings-back-btn" class="btn btn-primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- STATS SCREEN -->
+  <div id="stats-screen" class="screen hidden">
+    <div class="screen-inner">
+      <h2 class="screen-heading">STATISTICS</h2>
+      <div class="stats-list">
+        <div class="stats-row"><span>Games Played</span><span id="stats-games">0</span></div>
+        <div class="stats-row"><span>Best Score</span><span id="stats-best">0</span></div>
+        <div class="stats-row"><span>Longest Run</span><span id="stats-distance">0 km</span></div>
+        <div class="stats-row"><span>Coins Collected</span><span id="stats-coins">0</span></div>
+        <div class="stats-row"><span>Best Combo</span><span id="stats-combo">x0</span></div>
+        <div class="stats-row"><span>Power-ups Used</span><span id="stats-powerups">0</span></div>
+      </div>
+      <button id="stats-back-btn" class="btn btn-primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS SCREEN -->
+  <div id="achievements-screen" class="screen hidden">
+    <div class="screen-inner">
+      <h2 class="screen-heading">AWARDS</h2>
+      <div id="achievements-list" class="achievements-list"></div>
+      <button id="achievements-back-btn" class="btn btn-primary">BACK</button>
+    </div>
+  </div>
+
+  <!-- MOBILE CONTROLS -->
+  <div id="mobile-controls" class="hidden">
+    <button id="btn-duck" class="touch-btn">⬇</button>
+    <button id="btn-jump" class="touch-btn touch-btn-jump">⬆ JUMP</button>
+  </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/input.js"></script>
+<script src="js/player.js"></script>
+<script src="js/obstacles.js"></script>
+<script src="js/collectibles.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/environment.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
